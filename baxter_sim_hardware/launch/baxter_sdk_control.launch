@@ -11,7 +11,7 @@
   <rosparam file="$(find baxter_sim_hardware)/config/baxter_sim_controllers.yaml" command="load"/>
   <rosparam if="$(arg left_electric_gripper)" file="$(find baxter_sim_hardware)/config/baxter_left_electric_gripper_controller.yaml" command="load"/>
   <rosparam if="$(arg right_electric_gripper)" file="$(find baxter_sim_hardware)/config/baxter_right_electric_gripper_controller.yaml" command="load"/>
-
+  
   <!-- load the baxter_sim_hardware node -->
   <node name="baxter_emulator" pkg="baxter_sim_hardware" type="baxter_emulator" respawn="false"
 	output="screen" args="$(find baxter_sim_hardware)/images/researchsdk.png">
@@ -20,7 +20,10 @@
   </node>
   <!-- load the default controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-        output="screen" ns="/robot" args="--shutdown-timeout -1 joint_state_controller" />
+        output="screen" ns="/robot" args="--shutdown-timeout -1
+                                          joint_state_controller 
+                                          left_traj_action_controller
+                                          right_traj_action_controller" />
 
   <!-- load the stopped controllers -->
   <node name="controller_spawner_stopped" pkg="controller_manager" type="spawner" respawn="false"
@@ -31,7 +34,8 @@
 					   left_joint_velocity_controller
 					   right_joint_velocity_controller
 					   left_joint_effort_controller
-					   right_joint_effort_controller"/>
+					   right_joint_effort_controller
+                                           "/>
 
     <node if="$(arg left_electric_gripper)" name="left_gripper_controller_spawner_stopped" pkg="controller_manager" type="spawner" respawn="false"
         output="screen" ns="/robot" args="--shutdown-timeout -1 --stopped left_gripper_controller"/>
